@@ -92,4 +92,18 @@ public class UserService {
 
         return savedUser;
     }
+
+    @CacheEvict(value = "user-profile", key = "#result.keycloakUserId")
+    public User blockUser(Long id) {
+        User user = getUserById(id);
+        user.setBlocked(true);
+        return userRepository.save(user);
+    }
+
+    @CacheEvict(value = "user-profile", key = "#result.keycloakUserId")
+    public User unblockUser(Long id) {
+        User user = getUserById(id);
+        user.setBlocked(false);
+        return userRepository.save(user);
+    }
 }

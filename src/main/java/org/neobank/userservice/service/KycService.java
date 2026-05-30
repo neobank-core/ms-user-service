@@ -5,6 +5,7 @@ import org.neobank.userservice.entity.User;
 import org.neobank.userservice.entity.UserKyc;
 import org.neobank.userservice.enums.KycStatus;
 import org.neobank.userservice.exception.KycAlreadyExistsException;
+import org.neobank.userservice.exception.KycNotFoundException;
 import org.neobank.userservice.repository.UserKycRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,19 @@ public class KycService {
                 .status(KycStatus.PENDING)
                 .build();
         return userKycRepository.save(userKyc);
+    }
+
+    public UserKyc approveKyc(Long kycId) {
+        UserKyc kyc = userKycRepository.findById(kycId)
+                .orElseThrow(() -> new KycNotFoundException("KYC not found for ID: " + kycId));
+        kyc.setStatus(KycStatus.APPROVED);
+        return userKycRepository.save(kyc);
+    }
+
+    public UserKyc rejectKyc(Long kycId) {
+        UserKyc kyc = userKycRepository.findById(kycId)
+                .orElseThrow(() -> new KycNotFoundException("KYC not found for ID: " + kycId));
+        kyc.setStatus(KycStatus.REJECTED);
+        return userKycRepository.save(kyc);
     }
 }

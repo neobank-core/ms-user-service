@@ -51,4 +51,18 @@ public class UserController {
         User updatedUser = userService.updateCurrentUser(jwt, request);
         return ResponseEntity.ok(userMapper.toResponse(updatedUser));
     }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPPORT')")
+    @PostMapping("/{id}/block")
+    public ResponseEntity<UserResponse> blockUser(@PathVariable Long id) {
+        User user = userService.blockUser(id);
+        return ResponseEntity.ok(userMapper.toResponse(user));
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPPORT')")
+    @PostMapping("/{id}/unblock")
+    public ResponseEntity<UserResponse> unblockUser(@PathVariable Long id) {
+        User user = userService.unblockUser(id);
+        return ResponseEntity.ok(userMapper.toResponse(user));
+    }
 }

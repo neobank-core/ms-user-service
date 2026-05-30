@@ -35,6 +35,9 @@ public class User implements Serializable {
 
     private LocalDateTime createdAt;
 
+    @Column(name = "is_blocked", nullable = false)
+    private boolean isBlocked = false;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
