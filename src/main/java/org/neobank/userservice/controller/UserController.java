@@ -2,7 +2,6 @@ package org.neobank.userservice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.neobank.userservice.dto.RegisterUserRequest;
 import org.neobank.userservice.dto.UpdateUserRequest;
 import org.neobank.userservice.dto.UserResponse;
 import org.neobank.userservice.entity.User;

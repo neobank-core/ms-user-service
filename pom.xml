@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.neobank</groupId>
-    <artifactId>user-service</artifactId>
+    <artifactId>ms-user-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>user-service</name>
     <description>user-service</description>
