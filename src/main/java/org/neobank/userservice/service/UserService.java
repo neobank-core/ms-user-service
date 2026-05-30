@@ -8,6 +8,8 @@ import org.neobank.userservice.event.UserRegisteredEvent;
 import org.neobank.userservice.exception.UserNotFoundException;
 import org.neobank.userservice.publisher.UserEventPublisher;
 import org.neobank.userservice.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -26,6 +28,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with Keycloak ID: " + keycloakUserId));
     }
 
+    @Cacheable(value = "user-profile", key = "#jwt.subject")
     public User getOrCreateUser(Jwt jwt) {
         String keycloakUserId = jwt.getSubject();
 
@@ -54,6 +57,7 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
+    @CacheEvict(value = "user-profile", key = "#jwt.subject")
     public User updateCurrentUser(Jwt jwt, UpdateUserRequest request) {
         User user = getUserByKeycloakId(jwt.getSubject());
         user.setFirstName(request.firstName());
