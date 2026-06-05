@@ -65,4 +65,11 @@ public class UserController {
         User user = userService.unblockUser(id);
         return ResponseEntity.ok(userMapper.toResponse(user));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/me/address")
+    public ResponseEntity<Void> updateAddress(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody org.neobank.userservice.dto.UserAddressDto request) {
+        userService.updateAddress(jwt, request);
+        return ResponseEntity.ok().build();
+    }
 }

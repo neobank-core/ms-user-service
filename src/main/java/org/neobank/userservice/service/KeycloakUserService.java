@@ -46,4 +46,12 @@
                 throw new RuntimeException("Error creating user in Keycloak: " + e.getMessage(), e);
             }
         }
+
+        public String getUserIdByUsername(String username) {
+            List<UserRepresentation> users = keycloak.realm(realm).users().search(username, true);
+            if (users != null && !users.isEmpty()) {
+                return users.get(0).getId();
+            }
+            return null;
+        }
     }

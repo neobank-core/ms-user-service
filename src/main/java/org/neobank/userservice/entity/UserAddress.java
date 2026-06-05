@@ -2,18 +2,18 @@ package org.neobank.userservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.neobank.userservice.enums.KycStatus;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_kyc")
+@Table(name = "user_addresses")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserKyc {
+public class UserAddress {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,23 +22,23 @@ public class UserKyc {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private KycStatus status;
+    @Column(nullable = false)
+    private String country;
 
-    private String documentType;
+    @Column(nullable = false)
+    private String city;
 
-    @Column(name = "document_number")
-    private String documentNumber;
+    @Column(nullable = false)
+    private String street;
 
-    private LocalDateTime submittedAt;
+    @Column(name = "postal_code", nullable = false)
+    private String postalCode;
 
-    @Column(name = "reviewed_at")
-    private LocalDateTime reviewedAt;
-
-
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        this.submittedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 }

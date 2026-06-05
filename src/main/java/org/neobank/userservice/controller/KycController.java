@@ -31,7 +31,7 @@ public class KycController {
     @PostMapping
     public ResponseEntity<KycResponse> submitKyc(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody KycSubmissionRequest request) {
         User user = userService.getOrCreateUser(jwt);
-        UserKyc userKyc = kycService.submitKyc(user, request.documentType());
+        UserKyc userKyc = kycService.submitKyc(user, request.documentType(), request.documentNumber());
         return ResponseEntity.ok(kycMapper.toResponse(userKyc));
     }
 }

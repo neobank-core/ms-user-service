@@ -7,6 +7,7 @@ import org.neobank.userservice.entity.User;
 import org.neobank.userservice.event.UserRegisteredEvent;
 import org.neobank.userservice.exception.UserNotFoundException;
 import org.neobank.userservice.publisher.UserEventPublisher;
+import org.neobank.userservice.repository.UserAddressRepository;
 import org.neobank.userservice.repository.UserRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserAddressRepository userAddressRepository;
     private final KeycloakUserService keycloakUserService;
     private final UserEventPublisher userEventPublisher;
 
@@ -105,5 +107,18 @@ public class UserService {
         User user = getUserById(id);
         user.setBlocked(false);
         return userRepository.save(user);
+    }
+
+    public org.neobank.userservice.entity.UserAddress updateAddress(Jwt jwt, org.neobank.userservice.dto.UserAddressDto request) {
+        User user = getOrCreateUser(jwt);
+        org.neobank.userservice.entity.UserAddress address = userAddressRepository.findByUser(user)
+                .orElseGet(() -> org.neobank.userservice.entity.UserAddress.builder().user(user).build());
+
+        address.setCountry(request.getCountry());
+        address.setCity(request.getCity());
+        address.setStreet(request.getStreet());
+        address.setPostalCode(request.getPostalCode());
+
+        return userAddressRepository.save(address);
     }
 }
